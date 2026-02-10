@@ -208,7 +208,7 @@
             flex-shrink: 0;
         }
 
-        /* Popup Styles */
+        /* Popup Styles - APARECE AUTOMATICAMENTE */
         .popup-overlay {
             position: fixed;
             top: 0;
@@ -222,16 +222,18 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
             padding: 20px;
             overflow-y: auto;
+            animation: fadeIn 0.3s ease-out;
         }
 
-        .popup-overlay.show {
-            opacity: 1;
-            visibility: visible;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
         .popup {
@@ -241,15 +243,19 @@
             width: 100%;
             max-width: 550px;
             padding: 40px;
-            transform: scale(0.9);
-            opacity: 0;
-            transition: all 0.3s ease;
             margin: auto;
+            animation: popupScale 0.4s ease-out;
         }
 
-        .popup.show {
-            transform: scale(1);
-            opacity: 1;
+        @keyframes popupScale {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .popup-header {
@@ -611,7 +617,7 @@
         </footer>
     </div>
 
-    <!-- Popup Modal -->
+    <!-- Popup Modal - APARECE AUTOMATICAMENTE -->
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup" id="popup">
             <div class="popup-header">
@@ -652,57 +658,7 @@
     </div>
 
     <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('popupOverlay').classList.add('show');
-            document.getElementById('popup').classList.add('show');
-        });
-
-        const form = document.getElementById('urlForm');
-        const urlInput = document.getElementById('urlInput');
-        const errorMessage = document.getElementById('errorMessage');
-
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                let url = urlInput.value.trim();
-                
-                if (!url) {
-                    e.preventDefault();
-                    showError('Insira uma URL');
-                    return false;
-                }
-                
-                if (!url.match(/^https?:\/\//i)) {
-                    url = 'https://' + url;
-                }
-                
-                const urlPattern = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
-                
-                if (!urlPattern.test(url)) {
-                    e.preventDefault();
-                    showError('Insira uma URL válida');
-                    return false;
-                }
-                
-                urlInput.value = url;
-                hideError();
-            });
-
-            urlInput.addEventListener('input', function() {
-                hideError();
-            });
-        }
-
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            urlInput.classList.add('error');
-        }
-
-        function hideError() {
-            errorMessage.style.display = 'none';
-            urlInput.classList.remove('error');
-        }
-
+        // Função de copiar para área de transferência
         function copyToClipboard() {
             const inputElement = document.getElementById("shortUrlText");
             const btn = document.querySelector('.copy-btn');
@@ -710,7 +666,7 @@
             const copyIcon = btn.querySelector('.copy-icon');
             
             if (!inputElement) {
-                console.error('URL encurtada não encontrada :()');
+                console.error('URL encurtada não encontrada');
                 return;
             }
 
@@ -718,7 +674,7 @@
             inputElement.setSelectionRange(0, 99999);
 
             navigator.clipboard.writeText(inputElement.value).then(() => {
-                const originalText = copyText ? copyText.innerText : 'Copy';
+                const originalText = copyText ? copyText.innerText : 'Copiar';
                 
                 btn.classList.add('copied');
                 
@@ -742,7 +698,7 @@
                     }
                 }, 2000);
             }).catch(err => {
-                console.error('Failed to copy text: ', err);
+                console.error('Falha ao copiar: ', err);
                 
                 try {
                     document.execCommand('copy');
@@ -757,12 +713,13 @@
                         }
                     }, 2000);
                 } catch (fallbackErr) {
-                    console.error('Fallback copy failed: ', fallbackErr);
-                    alert('Failed to copy URL. Please copy manually.');
+                    console.error('Método alternativo falhou: ', fallbackErr);
+                    alert('Não foi possível copiar. Por favor, copie manualmente.');
                 }
             });
         }
 
+        // Selecionar URL ao clicar
         const shortUrlInput = document.getElementById('shortUrlText');
         
         if (shortUrlInput) {
@@ -777,6 +734,7 @@
                 this.select();
             });
 
+            // Foca e seleciona automaticamente
             shortUrlInput.focus();
             shortUrlInput.select();
         }

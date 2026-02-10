@@ -376,7 +376,7 @@
     </div>
 
     <script>
-        
+        // Validação de URL e adição automática de protocolo
         const form = document.getElementById('urlForm');
         const urlInput = document.getElementById('urlInput');
         const errorMessage = document.getElementById('errorMessage');
@@ -384,28 +384,33 @@
         form.addEventListener('submit', function(e) {
             let url = urlInput.value.trim();
             
+            // Remove espaços extras
             if (!url) {
                 e.preventDefault();
                 showError('Insira uma URL');
                 return false;
             }
             
+            // Adiciona https:// se não tiver protocolo
             if (!url.match(/^https?:\/\//i)) {
                 url = 'https://' + url;
             }
             
+            // Valida o formato da URL
             const urlPattern = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
             
             if (!urlPattern.test(url)) {
                 e.preventDefault();
-                showError('Insira uma URL válida');
+                showError('Insira uma URL válida (ex: chatgpt.com)');
                 return false;
             }
             
+            // Atualiza o valor do input com o protocolo
             urlInput.value = url;
             hideError();
         });
 
+        // Limpa erro ao digitar
         urlInput.addEventListener('input', function() {
             hideError();
         });

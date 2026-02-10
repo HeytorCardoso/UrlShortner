@@ -15,7 +15,7 @@ hashids_key = os.getenv("HASHIDS_KEY")
 hashids = Hashids(salt=hashids_key, min_length=8)
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = db_url
+app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///database.db'
 db.init_app(app)
 
 @app.route("/", methods=["GET", "POST"])
@@ -52,5 +52,5 @@ def link(id):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 80))
     app.run(host="0.0.0.0", port=port)

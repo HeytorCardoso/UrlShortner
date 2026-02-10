@@ -4,6 +4,7 @@ from models import longUrl
 import os
 from dotenv import load_dotenv
 from hashids import Hashids
+from sqlalchemy import desc
 import hashlib
 import psycopg2
 
@@ -12,7 +13,7 @@ load_dotenv()
 db_url = os.getenv("DATABASE_URL")
 
 hashids_key = os.getenv("HASHIDS_KEY")
-hashids = Hashids(salt=hashids_key, min_length=8)
+hashids = Hashids(salt=hashids_key, alphabet="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///database.db'
@@ -21,16 +22,28 @@ db.init_app(app)
 @app.route("/", methods=["GET", "POST"])
 def home():
     if request.method == "POST":
-        long_Url = request.form["urlForm"]
+        long_Url = request.form.get("urlForm", "").strip()
+
+        if not long_Url:
+            return redirect(url_for("home"))
+
         exists_url = longUrl.query.filter_by(long_url=long_Url).first()
 
         if exists_url:
             short_Url = exists_url.short_url
         else:
-            short_Url = int.from_bytes(hashlib.sha1(long_Url.encode()).digest()[:6], "big")
-            data_url = longUrl(long_url=long_Url, short_url=short_Url)
-            db.session.add(data_url)
-            db.session.commit()
+            try:
+                data_url = longUrl(long_url=long_Url, short_url=None)
+                db.session.add(data_url)
+                db.session.flush()
+
+                short_Url = hashids.encode(((data_url.id)+12000))
+                data_url.short_url = short_Url
+                db.session.commit()
+            except Exception as e:
+                db.session.rollback()
+                print(f"Erro crítico: {e}")
+                return "Erro ao processar sua requisição", 500
 
         return redirect(url_for('response', short_url=short_Url))
     return render_template("index.html")

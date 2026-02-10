@@ -1,36 +1,94 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport", content="width=device-width, initial-scale=1.0">
-        <title>UrlShortner</title>
-        <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
-        <script src="{{url_for('static', filename='js/main.js')}}"></script>
-    </head>
-    <body style="background-color: rgb(228, 228, 228);">
-        <div class="back-frame">
-            <form method="POST" class="main-frame">
-                <h2 id="title">URLSHORTNER</h2><br>
-                <h3 id="description">Enter your long url bellow and submit to transform in short url.</h3><br>
-                <input id="urlInput" type="" class="input" placeholder="Insert your long url in here!" name="urlForm"><br>
-                <input id="btn-submit" type="submit" class="submit-button" value="Submit" onclick="openPopup()"></button>
-              </form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encurtador de URL</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+</head>
+<body>
+    <div class="back-frame">
+        <div class="container">
+            <form method="POST" class="main-frame" id="urlForm">
+                <div class="icon-container">
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </div>
+                <h1 class="title">Encurtador de URL</h1>
+                <p class="description">Transforme suas URLs longas em links menores</p>
+                
+                <div class="input-container">
+                    <input 
+                        id="urlInput" 
+                        type="text" 
+                        class="input" 
+                        placeholder="Insira sua URL longa aqui"
+                        name="urlForm"
+                        required
+                    >
+                    <span class="error-message" id="errorMessage"></span>
+                </div>
+                
+                <button type="submit" class="submit-button">
+                    <span>Encurtar URL</span>
+                    <svg class="button-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </form>
         </div>
+        <footer class="footer">
+            <p>Desenvolvido por Heytor Cardoso</p>
+        </footer>
+    </div>
 
-<script>
-    let popup = document.getElementById("popup");
-    let popup_frame = document.getElementById("popup_frame");
+    <script>
 
-    function openPopup(){
-        popup.classList.add("open-popup");
-        popup_frame.classList.add("open-popup");
-    }
+        const form = document.getElementById('urlForm');
+        const urlInput = document.getElementById('urlInput');
+        const errorMessage = document.getElementById('errorMessage');
 
-    function closePopup(){
-        popup.classList.add("close-popup")
-        popup_frame.classList.add("close-popup");
-    }
-</script>      
-        
-    </body>
+        form.addEventListener('submit', function(e) {
+            let url = urlInput.value.trim();
+
+            if (!url) {
+                e.preventDefault();
+                showError('Please enter a URL');
+                return false;
+            }
+            
+            if (!url.match(/^https?:\/\//i)) {
+                url = 'https://' + url;
+            }
+            
+            const urlPattern = /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
+            
+            if (!urlPattern.test(url)) {
+                e.preventDefault();
+                showError('Please enter a valid URL (e.g., chatgpt.com)');
+                return false;
+            }
+            
+            urlInput.value = url;
+            hideError();
+        });
+
+        urlInput.addEventListener('input', function() {
+            hideError();
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            urlInput.classList.add('error');
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+            urlInput.classList.remove('error');
+        }
+    </script>
+</body>
 </html>

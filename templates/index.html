@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport", content="width=device-width, initial-scale=1.0">
+        <title>UrlShortner</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+        <script src="{{url_for('static', filename='js/main.js')}}"></script>
+    </head>
+    <body style="background-color: rgb(228, 228, 228);">
+        <div class="back-frame">
+            <form method="POST" class="main-frame">
+                <h2 id="title">URLSHORTNER</h2><br>
+                <h3 id="description">Enter your long url bellow and submit to transform in short url.</h3><br>
+                <input id="urlInput" type="" class="input" placeholder="Insert your long url in here!" name="urlForm"><br>
+                <input id="btn-submit" type="submit" class="submit-button" value="Submit" onclick="openPopup()"></button>
+              </form>
+        </div>
+
+<script>
+    let popup = document.getElementById("popup");
+    let popup_frame = document.getElementById("popup_frame");
+
+    function openPopup(){
+        popup.classList.add("open-popup");
+        popup_frame.classList.add("open-popup");
+    }
+
+    function closePopup(){
+        popup.classList.add("close-popup")
+        popup_frame.classList.add("close-popup");
+    }
+</script>      
+        
+    </body>
+</html>

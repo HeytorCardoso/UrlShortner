@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport", content="width=device-width, initial-scale=1.0">
+        <title>UrlShortner</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+        <script src="{{url_for('static', filename='js/main.js')}}"></script>
+    </head>
+    <body style="background-color: rgb(228, 228, 228);">
+        <div class="back-frame">
+            <form method="POST" class="main-frame">
+                <h2 id="title">URLSHORTNER</h2><br>
+                <h3 id="description">Enter your long url bellow and submit to transform in short url.</h3><br>
+                <input id="urlInput" type="" class="input" placeholder="Insert your long url in here!" name="urlForm"><br>
+                <input id="btn-submit" type="submit" class="submit-button" value="Submit" onclick="openPopup()"></button>
+                <div class="popup-frame" id="popup_frame">
+                    <div class="close-popup" id="popup">
+                    <h2>Your encurted URL:</h2><br>
+                    <a href="https://{{short_url}}" target="_blank" rel="noopener noreferrer">aa</a><br>
+                    <input id="btn-submit" type="button" class="submit-button" value="Close" onclick="window.location.href='{{ url_for('home') }}'"></button>
+                    </div>
+                </div>
+              </form>
+        </div>  
+    </body>
+</html>

@@ -39,6 +39,11 @@
     font-size: 12px;
 }
 
+#urlInput {
+    color: rgb(147, 146, 146);
+    padding: 10px;
+}
+
 .input {
     color: red;
     border: 2px solid rgb(0, 102, 255);
@@ -56,4 +61,43 @@
     width: 130px;
     height: 35px;
     border-radius: 8px;
+}
+
+.submit-button:hover {
+    cursor: pointer;
+    background-color: rgb(45, 129, 255);
+}
+
+.submit-button:active {
+    background-color: rgb(63, 255, 140);
+}
+
+#popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 40dvw;
+    height: 60dvh;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 2px 2px 12px 0px gray;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    visibility: visible;
+}
+
+#short_url {
+    color: rgb(147, 146, 146);
+    font-size: 18px;
+}
+
+#popup_frame {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.386);
+    height: 100dvh;
+    width: 100dvw;
+    visibility: visible;
 }

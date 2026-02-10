@@ -20,9 +20,7 @@ db.init_app(app)
 
 @app.route("/", methods=["GET", "POST"])
 def home():
-    if request.method == "GET":
-        return render_template("index.html")
-    elif request.method == "POST":
+    if request.method == "POST":
         long_Url = request.form["urlForm"]
         exists_url = longUrl.query.filter_by(long_url=long_Url).first()
 
@@ -30,12 +28,12 @@ def home():
             short_Url = exists_url.short_url
         else:
             short_Url = int.from_bytes(hashlib.sha1(long_Url.encode()).digest()[:6], "big")
+            data_url = longUrl(long_url=long_Url, short_url=short_Url)
+            db.session.add(data_url)
+            db.session.commit()
 
-        data_url = longUrl(long_url=long_Url, short_url=short_Url)
-        db.session.add(data_url)
-        db.session.commit()
-
-        return redirect(url_for('response', short_url = short_Url))
+        return redirect(url_for('response', short_url=short_Url))
+    return render_template("index.html")
     
 @app.route("/response/<short_url>")
 def response(short_url):
@@ -54,4 +52,5 @@ def link(id):
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)

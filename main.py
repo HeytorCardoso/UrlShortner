@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from hashids import Hashids
 from sqlalchemy import desc
 import hashlib
-import psycopg2
 
 load_dotenv()
 

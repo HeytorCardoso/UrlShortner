@@ -1,2 +1,2 @@
 #!/bin/bash
-python main.py >> app.log 2>&1
+python3 main.py >> app.log 2>&1

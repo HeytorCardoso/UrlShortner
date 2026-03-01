@@ -1,2 +1,3 @@
 #!/bin/bash
-python3 main.py >> app.log 2>&1
+cd "$(dirname "$0")"
+exec python3 main.py >> app.log 2>&1
